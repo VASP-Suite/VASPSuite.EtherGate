@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -59,6 +59,7 @@ jobs:
           PROJECT_FILE_PATH: src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
           VERSION_STATIC: ${{ steps.calulate-version.outputs.NuGetPackageVersion }}
           NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          TAG_COMMIT: false
           INCLUDE_SYMBOLS: true
   publish-ethergate-abstractions:
     name: Build and publish VASPSuite.EtherGate.Abstractions
@@ -87,4 +88,5 @@ jobs:
           PROJECT_FILE_PATH: src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
           VERSION_STATIC: ${{ steps.calulate-version.outputs.NuGetPackageVersion }}
           NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          TAG_COMMIT: false
           INCLUDE_SYMBOLS: true
