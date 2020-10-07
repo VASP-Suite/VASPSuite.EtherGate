@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  pull-request:
+    branches:
+      - master
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_VERSION: 3.1.402
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+      - name: Setup ganache-cli
+        run: 'npm install -g ganache-cli'
+      - name: Launch ganache-cli
+        run: 'ganache-cli &'
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Run tests
+        run: 'dotnet test'

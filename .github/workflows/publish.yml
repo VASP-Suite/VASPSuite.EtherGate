@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_VERSION: 3.1.402
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+      - name: Setup ganache-cli
+        run: 'npm install -g ganache-cli'
+      - name: Launch ganache-cli
+        run: 'ganache-cli &'
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Run tests
+        run: 'dotnet test'
+  publish-ethergate:
+    name: Build and publish VASPSuite.EtherGate
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_NAME: VASPSuite.EtherGate.Abstractions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Calculate version
+        uses: dotnet/nbgv@master
+        id: calulate-version
+        with:
+          path: src/${{ env.PROJECT_NAME }}
+      - name: Publish VASPSuite.EtherGate NuGet package on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
+          VERSION_STATIC: ${{ steps.calulate-version.outputs.NuGetPackageVersion }}
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          INCLUDE_SYMBOLS: true
+  publish-ethergate-abstractions:
+    name: Build and publish VASPSuite.EtherGate.Abstractions
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_NAME: VASPSuite.EtherGate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Calculate version
+        uses: dotnet/nbgv@master
+        id: calulate-version
+        with:
+          path: src/${{ env.PROJECT_NAME }}
+      - name: Publish VASPSuite.EtherGate.Abstractions NuGet package on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
+          VERSION_STATIC: ${{ steps.calulate-version.outputs.NuGetPackageVersion }}
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          INCLUDE_SYMBOLS: true
