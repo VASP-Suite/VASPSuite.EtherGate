@@ -53,5 +53,4 @@ jobs:
           TAG_COMMIT: true
           INCLUDE_SYMBOLS: true
       - name: Publish test coverage report
-        run: bash <(curl -s https://codecov.io/bash)
-        timeout-minutes: 3 
+        uses: codecov/codecov-action@v1
