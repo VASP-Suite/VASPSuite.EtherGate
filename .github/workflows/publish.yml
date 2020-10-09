@@ -6,6 +6,7 @@ on:
       - master
 
 env:
+  CODECOV_TOKEN: 6e7c326b-cd2c-476f-abc8-0bee724418d1
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_VERSION: 3.1.402
   NODE_VERSION: 10
@@ -51,3 +52,6 @@ jobs:
           NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
           TAG_COMMIT: true
           INCLUDE_SYMBOLS: true
+      - name: Publish test coverage report
+        run: bash <(curl -s https://codecov.io/bash)
+        timeout-minutes: 3 
