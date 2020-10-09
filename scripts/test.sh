@@ -34,4 +34,4 @@ start_ganache() {
 }
 
 start_ganache
-dotnet test /p:CollectCoverage=true
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
