@@ -34,4 +34,4 @@ start_ganache() {
 }
 
 start_ganache
-dotnet test
+dotnet test /p:CollectCoverage=true
