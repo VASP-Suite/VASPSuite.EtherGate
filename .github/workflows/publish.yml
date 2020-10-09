@@ -1,0 +1,53 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_VERSION: 3.1.402
+  NODE_VERSION: 10
+
+jobs:
+  release:
+    name: Build and publish NuGet packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup GitVersioning CLI
+        run: 'dotnet tool install -g nbgv'
+      - name: Setup Node.js
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Setup Ganache CLI
+        run: 'npm install -g ganache-cli'
+      - name: Run tests
+        run: './scripts/test.sh'
+      - name: Update VASPSuite.EtherGate.Abstractions version
+        run: './scripts/update-version.sh VASPSuite.EtherGate.Abstractions'
+      - name: Update VASPSuite.EtherGate version
+        run: './scripts/update-version.sh VASPSuite.EtherGate'
+      - name: Build and publish VASPSuite.EtherGate.Abstractions
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/VASPSuite.EtherGate.Abstractions/VASPSuite.EtherGate.Abstractions.csproj
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          TAG_COMMIT: false
+          INCLUDE_SYMBOLS: true
+      - name: Build and publish VASPSuite.EtherGate
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/VASPSuite.EtherGate/VASPSuite.EtherGate.csproj
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          TAG_COMMIT: true
+          INCLUDE_SYMBOLS: true
