@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace VASPSuite.EtherGate.Features.VASPRegistry
+namespace VASPSuite.EtherGate.Features.VASPRegistryClient
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,22 +20,24 @@ namespace VASPSuite.EtherGate.Features.VASPRegistry
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Validate VASP credentials off-chain")]
-    public partial class ValidateVASPCredentialsOff_ChainFeature
+    [NUnit.Framework.DescriptionAttribute("Validate VASP credentials on-chain with a reference implementation of a VASP regi" +
+        "stry")]
+    public partial class ValidateVASPCredentialsOn_ChainWithAReferenceImplementationOfAVASPRegistryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "ValidateVASPCredentialsOffChain.feature"
+#line 1 "ValidateVASPCredentialsOnChain.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "VASPRegistry", "Validate VASP credentials off-chain", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "VASPRegistryClient", "Validate VASP credentials on-chain with a reference implementation of a VASP regi" +
+                    "stry", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -73,21 +75,30 @@ namespace VASPSuite.EtherGate.Features.VASPRegistry
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 3
+  #line hidden
+#line 4
+    testRunner.Given("VASPDirectory smart contract was deployed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+        }
+        
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Calling ValidateCredentialsOffline method of a VASPRegistryClient")]
+        [NUnit.Framework.DescriptionAttribute("Calling ValidateCredentialsAsync method of a VASPDirectoryClient")]
         [NUnit.Framework.TestCaseAttribute("Examples/Credentials/f00000000001.json", "0x2a433539bb6f490f0e7f53e36708b65ea32ada9ba0660e37c8d74069a53ce89f", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Examples/Credentials/f00000000001.json", "0x3fc752bf18130623d5bf4a85ab1575102d3ff8bf391d4dc4b18959c6a7a97491", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Examples/Credentials/f00000000002.json", "0x2a433539bb6f490f0e7f53e36708b65ea32ada9ba0660e37c8d74069a53ce89f", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Examples/Credentials/f00000000002.json", "0x3fc752bf18130623d5bf4a85ab1575102d3ff8bf391d4dc4b18959c6a7a97491", "true", null)]
-        public virtual void CallingValidateCredentialsOfflineMethodOfAVASPRegistryClient(string credentialsJsonPath, string credentialsHash, string result, string[] exampleTags)
+        public virtual void CallingValidateCredentialsAsyncMethodOfAVASPDirectoryClient(string credentialsJsonPath, string credentialsHash, string result, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("credentialsJsonPath", credentialsJsonPath);
             argumentsOfScenario.Add("credentialsHash", credentialsHash);
             argumentsOfScenario.Add("result", result);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Calling ValidateCredentialsOffline method of a VASPRegistryClient", null, tagsOfScenario, argumentsOfScenario);
-#line 3
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Calling ValidateCredentialsAsync method of a VASPDirectoryClient", null, tagsOfScenario, argumentsOfScenario);
+#line 6
   this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -107,12 +118,15 @@ namespace VASPSuite.EtherGate.Features.VASPRegistry
             else
             {
                 this.ScenarioStart();
-#line 4
-    testRunner.When(string.Format("I call ValidateCredentialsOffline method of a VASPRegistryClient with a credentia" +
-                            "ls from \"{0}\" and a following hash \"{1}\"", credentialsJsonPath, credentialsHash), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 3
+  this.FeatureBackground();
 #line hidden
-#line 5
-    testRunner.Then(string.Format("the ValidateCredentialsOffline call result should be \"{0}\"", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 7
+    testRunner.When(string.Format("I call ValidateCredentialsAsync method of a VASPRegistryClient with a credentials" +
+                            " from \"{0}\" and a following hash \"{1}\"", credentialsJsonPath, credentialsHash), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 8
+    testRunner.Then(string.Format("the ValidateCredentialsAsync call result should be \"{0}\"", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

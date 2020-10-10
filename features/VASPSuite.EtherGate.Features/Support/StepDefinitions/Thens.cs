@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Shouldly;
 using TechTalk.SpecFlow;
 using VASPSuite.EtherGate.Features.Support.Extensions;
@@ -229,6 +230,39 @@ namespace VASPSuite.EtherGate.Features.Support.StepDefinitions
             
             actualHash
                 .ShouldBe(VASPCredentialsHash.Parse(expectedHash));
+        }
+        
+        [Then(@"the ToString call result should be ""(.*)""")]
+        public void ToStringCallResultShouldBe(
+            string expectedResult)
+        {
+            _scenarioContext
+                .GetCallResult<string>()
+                .ShouldBe(expectedResult);
+        }
+        
+        [Then(@"a FormatException will be thrown")]
+        public void FormatExceptionWillBeThrown()
+        {
+            var actualException = _scenarioContext
+                .GetException();
+            
+            actualException
+                .ShouldNotBeNull();
+
+            actualException
+                .ShouldBeOfType<FormatException>();
+        }
+        
+        [Then(@"the Address\.Parse call result should be ""(.*)""")]
+        public void AddressParseCallResultShouldBe(
+            string expectedResultBytes)
+        {
+            var expectedResult = new Address(expectedResultBytes.HexToByteArray());
+            
+            _scenarioContext
+                .GetCallResult<Address>()
+                .ShouldBe(expectedResult);
         }
     }
 }

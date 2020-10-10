@@ -35,6 +35,12 @@
       <Compile Update="VASPDirectoryClient\GetVASPCredentials.feature.cs">
         <DependentUpon>GetVASPCredentials.feature</DependentUpon>
       </Compile>
+      <Compile Update="VASPRegistryClient\ValidateVASPCredentialsOffChain.feature.cs">
+        <DependentUpon>ValidateVASPCredentialsOffChain.feature</DependentUpon>
+      </Compile>
+      <Compile Update="ValueObjects\Address\EIP55Compliance.feature.cs">
+        <DependentUpon>EIP55Compliance.feature</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

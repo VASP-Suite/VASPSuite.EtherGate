@@ -72,7 +72,7 @@ namespace VASPSuite.EtherGate.Support
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < Digest.Length; i++)
             {
-                hexStringBuilder.Append(_value[i].ToString("X2"));
+                hexStringBuilder.Append(_value[i].ToString("x2"));
             }
 
             return hexStringBuilder.ToString();

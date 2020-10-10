@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
@@ -8,11 +9,21 @@ namespace VASPSuite.EtherGate.Features.Support.Extensions
     internal static class ScenarioContextExtensions
     {
         private const string CallResultKey = "CallResult";
+        private const string ExceptionKey = "Exception";
+
         
         public static T GetCallResult<T>(
             this ScenarioContext scenarioContext)
         {
             return (T) scenarioContext[CallResultKey];
+        }
+        
+        public static Exception? GetException(
+            this ScenarioContext scenarioContext)
+        {
+            return scenarioContext.ContainsKey(ExceptionKey)
+                ? scenarioContext[ExceptionKey] as Exception
+                : null;
         }
         
         public static T GetContractByFakeAddress<T>(
@@ -95,6 +106,14 @@ namespace VASPSuite.EtherGate.Features.Support.Extensions
             T callResult)
         {
             scenarioContext[CallResultKey] = callResult;
+        }
+        
+        public static void SetException<T>(
+            this ScenarioContext scenarioContext,
+            T exception)
+            where T : Exception
+        {
+            scenarioContext[ExceptionKey] = exception;
         }
         
         private static ICollection<SmartContract> GetContracts(
