@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public interface IVASPRegistryClient
+    public interface IVASPRegistryClient : ISmartContractClient
     {
         Task<string> GetCredentialsAsync(
             VASPId vaspId,

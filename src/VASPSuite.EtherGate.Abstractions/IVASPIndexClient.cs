@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public interface IVASPIndexClient
+    public interface IVASPIndexClient : ISmartContractClient
     {
         Task<Address> GetVASPContractAddressAsync(
             VASPCode vaspCode,

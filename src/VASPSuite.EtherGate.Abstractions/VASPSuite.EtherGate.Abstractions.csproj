@@ -7,6 +7,12 @@
         <Nullable>enable</Nullable>
         <RootNamespace>VASPSuite.EtherGate</RootNamespace>
         <Version>0.0.0</Version>
+        <Company>Lykke Business AG</Company>
+        <Product>VASP Suite</Product>
+        <Copyright>Lykke Business AG</Copyright>
+        <PackageLicenseUrl>https://github.com/VASPSuite/VASPSuite.EtherGate/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/VASPSuite/VASPSuite.EtherGate</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
