@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public interface IVASPContractClient
+    public interface IVASPContractClient : ISmartContractClient
     {
         Task<Channels> GetChannelsAsync(
             ConfirmationLevel minimalConfirmationLevel = default);

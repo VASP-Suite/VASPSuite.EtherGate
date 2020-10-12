@@ -38,6 +38,8 @@ jobs:
         run: './scripts/update-version.sh VASPSuite.EtherGate.Abstractions'
       - name: Update VASPSuite.EtherGate version
         run: './scripts/update-version.sh VASPSuite.EtherGate'
+      - name: Update VASPSuite.EtherGate.Autofac version
+        run: './scripts/update-version.sh VASPSuite.EtherGate.Autofac'
       - name: Build and publish VASPSuite.EtherGate.Abstractions
         uses: rohith/publish-nuget@v2
         with:
@@ -51,6 +53,13 @@ jobs:
           PROJECT_FILE_PATH: src/VASPSuite.EtherGate/VASPSuite.EtherGate.csproj
           NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
           TAG_COMMIT: true
+          INCLUDE_SYMBOLS: true
+      - name: Build and publish VASPSuite.Autofac
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/VASPSuite.EtherGate.Autofac/VASPSuite.EtherGate.Autofac.csproj
+          NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
+          TAG_COMMIT: false
           INCLUDE_SYMBOLS: true
       - name: Publish test coverage report
         uses: codecov/codecov-action@v1

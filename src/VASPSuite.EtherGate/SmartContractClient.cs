@@ -9,7 +9,7 @@ using VASPSuite.EtherGate.Extensions;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public abstract class SmartContractClient
+    public abstract class SmartContractClient : ISmartContractClient
     {
         protected SmartContractClient(
             Address contractAddress,
@@ -20,7 +20,7 @@ namespace VASPSuite.EtherGate
         }
         
         
-        protected Address ContractAddress { get; }
+        public Address ContractAddress { get; }
         
         protected IWeb3 Web3 { get; }
 
