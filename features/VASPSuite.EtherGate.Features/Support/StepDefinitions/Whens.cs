@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Web3;
 using TechTalk.SpecFlow;
 using VASPSuite.EtherGate.Features.Support.Extensions;
@@ -360,13 +361,41 @@ namespace VASPSuite.EtherGate.Features.Support.StepDefinitions
             string credentialsExamplePath,
             string credentialsHash)
         {
-            var callResult = VASPRegistryClient.ValidateCredentialsOffline
+            var callResult = EtherGate.VASPRegistryClient.ValidateCredentialsOffline
             (
                 credentials: File.ReadAllText(credentialsExamplePath),
                 credentialsHash: VASPCredentialsHash.Parse(credentialsHash)
             );
             
             _scenarioContext.SetCallResult(callResult);
+        }
+        
+        [When(@"I call ToString method of an Address ""(.*)"" with a following parameter: ""(.*)""")]
+        // ReSharper disable once InconsistentNaming
+        public void ICallToStringMethodOfAddressWithAFollowingParameter(
+            string addressBytes,
+            bool addChecksum)
+        {
+            var callResult = (new Address(addressBytes.HexToByteArray()))
+                .ToString(addChecksum);
+            
+            _scenarioContext.SetCallResult(callResult);
+        }
+        
+        [When(@"I call Parse method of the Address struct with a following parameter: ""(.*)""")]
+        public void ICallParseMethodOfAddressStruct(
+            string addressString)
+        {
+            try
+            {
+                var callResult = Address.Parse(addressString);
+            
+                _scenarioContext.SetCallResult(callResult);
+            }
+            catch (Exception e)
+            {
+                _scenarioContext.SetException(e);
+            }
         }
     }
 }

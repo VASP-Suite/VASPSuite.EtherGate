@@ -66,6 +66,14 @@ namespace VASPSuite.EtherGate
         public static Address Parse(
             string value)
         {
+            var isAllLowerCase = value == value.ToLowerInvariant();
+            var isValidMixedCase = value == AddressUtil.Current.ConvertToChecksumAddress(value);
+            
+            if (!isAllLowerCase && !isValidMixedCase)
+            {
+                throw new FormatException("Checksum is invalid. See EIP-55 for details.");
+            }
+            
             return new Address(ByteArray<Digest>.Parse(value));
         }
 
