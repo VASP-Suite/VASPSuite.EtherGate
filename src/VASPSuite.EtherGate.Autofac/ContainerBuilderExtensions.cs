@@ -30,11 +30,10 @@ namespace Autofac
             this ContainerBuilder containerBuilder)
         {
             return containerBuilder
-                .Register(context => new VASPContractClientFactory
+                .Register<IVASPContractClientFactory>(context => new VASPContractClientFactory
                 (
                         web3: context.Resolve<IWeb3>()
-                ))
-                .As<IVASPContractClientFactory>();
+                ));
         }
 
         public static IVASPDirectoryClientRegistrationBuilder RegisterVASPDirectoryClient(
@@ -46,8 +45,7 @@ namespace Autofac
                 (
                     address: vaspDirectoryAddress,
                     web3: context.Resolve<IWeb3>()
-                ))
-                .Keyed<Address>(vaspDirectoryAddress);
+                ));
         }
         
         public static IVASPDirectoryClientRegistrationBuilder RegisterVASPDirectoryClient(
