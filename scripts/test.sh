@@ -34,4 +34,6 @@ start_ganache() {
 }
 
 start_ganache
-dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+dotnet restore
+dotnet build --no-restore
+dotnet test --no-restore --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
