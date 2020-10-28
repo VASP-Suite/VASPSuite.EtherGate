@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+        <PackageReference Include="Nethereum.Hex" Version="3.8.0" />
+        <PackageReference Include="nunit" Version="3.12.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="Shouldly" Version="3.0.2" />
+        <PackageReference Include="SpecFlow" Version="3.4.8" />
+        <PackageReference Include="SpecFlow.Autofac" Version="3.4.8" />
+        <PackageReference Include="SpecFlow.NUnit" Version="3.4.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\VASPSuite.EtherGate\VASPSuite.EtherGate.csproj" />
+    </ItemGroup>
+
+    <Target Name="CopyFeatureExamples" BeforeTargets="BeforeUpdateFeatureFilesInProject">
+        <ItemGroup>
+            <EtherGateFeatureExamplesFiles Include="..\..\features\Examples\**\*.*" />
+        </ItemGroup>
+
+        <RemoveDir Directories="$(TargetDir)\Examples" />
+        <Copy SourceFiles="@(EtherGateFeatureExamplesFiles)" DestinationFiles="@(EtherGateFeatureExamplesFiles->'$(TargetDir)\Examples\%(RecursiveDir)%(Filename)%(Extension)')" />
+    </Target>
+    
+    <Target Name="CopyFeatureSpecs" BeforeTargets="BeforeUpdateFeatureFilesInProject">
+        <ItemGroup>
+            <EtherGateFeatureFiles Include="..\..\features\**\*.feature" />
+        </ItemGroup>
+        
+        <RemoveDir Directories="Features" />
+        <Copy SourceFiles="@(EtherGateFeatureFiles)" DestinationFiles="@(EtherGateFeatureFiles->'Features\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+        <ItemGroup>
+            <_SpecFlowFeatureFiles Include="Features/**/*.feature" />
+            <SpecFlowFeatureFiles Include="@(_SpecFlowFeatureFiles)" Exclude="@(SpecFlowFeatureFiles)" />
+        </ItemGroup>
+    </Target>
+
+</Project>
