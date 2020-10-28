@@ -15,11 +15,11 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
         <PackageReference Include="Nethereum.Hex" Version="3.8.0" />
         <PackageReference Include="nunit" Version="3.12.0" />
-        <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
         <PackageReference Include="Shouldly" Version="3.0.2" />
-        <PackageReference Include="SpecFlow" Version="3.4.8" />
-        <PackageReference Include="SpecFlow.Autofac" Version="3.4.8" />
-        <PackageReference Include="SpecFlow.NUnit" Version="3.4.8" />
+        <PackageReference Include="SpecFlow" Version="3.4.31" />
+        <PackageReference Include="SpecFlow.Autofac" Version="3.4.31" />
+        <PackageReference Include="SpecFlow.NUnit" Version="3.4.31" />
     </ItemGroup>
 
     <ItemGroup>
@@ -41,10 +41,16 @@
         </ItemGroup>
         
         <RemoveDir Directories="Features" />
-        <Copy SourceFiles="@(EtherGateFeatureFiles)" DestinationFiles="@(EtherGateFeatureFiles->'Features\%(RecursiveDir)%(Filename)%(Extension)')" />
+        <Copy SourceFiles="@(EtherGateFeatureFiles)" DestinationFiles="@(EtherGateFeatureFiles->'Features\%(RecursiveDir)%(Filename).feature')" />
 
         <ItemGroup>
             <_SpecFlowFeatureFiles Include="Features/**/*.feature" />
+
+            <_SpecFlowFeatureFiles>
+                <CodeBehindFile>Features/%(RecursiveDir)%(Filename).feature.cs</CodeBehindFile>
+                <Visible>$(UsingMicrosoftNETSdk)</Visible>
+            </_SpecFlowFeatureFiles>
+            
             <SpecFlowFeatureFiles Include="@(_SpecFlowFeatureFiles)" Exclude="@(SpecFlowFeatureFiles)" />
         </ItemGroup>
     </Target>
