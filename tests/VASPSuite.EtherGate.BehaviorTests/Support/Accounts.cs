@@ -1,27 +1,38 @@
+using System.Threading.Tasks;
 using Nethereum.Web3;
 
 namespace VASPSuite.EtherGate.BehaviorTests.Support
 {
     public class Accounts
     {
-        private readonly string[] _accounts;
+        private readonly IWeb3 _web3;
 
+        
         public Accounts(
             IWeb3 web3)
         {
-            _accounts = web3.Eth.Accounts.SendRequestAsync().Result;
+            _web3 = web3;
         }
 
-        public Address Deployer
-            => Address.Parse(_accounts[0]);
+
+        private async Task<Address> GetAddressAsync(
+            int index)
+        {
+            var accounts = await _web3.Eth.Accounts.SendRequestAsync();
+
+            return Address.Parse(accounts[index]);
+        }
         
-        public Address Owner
-            => Address.Parse(_accounts[1]);
+        public Task<Address> GetDeployerAsync()
+            => GetAddressAsync(0);
         
-        public Address Administrator
-            => Address.Parse(_accounts[2]);
+        public Task<Address> GetOwnerAsync()
+            => GetAddressAsync(1);
         
-        public Address Other
-            => Address.Parse(_accounts[9]);
+        public Task<Address> GetAdministratorAsync()
+            => GetAddressAsync(2);
+        
+        public Task<Address> GetOtherAsync()
+            => GetAddressAsync(9);
     }
 }

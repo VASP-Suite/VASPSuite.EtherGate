@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Numerics;
 using JetBrains.Annotations;
 
@@ -6,7 +7,7 @@ using JetBrains.Annotations;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public readonly struct ConfirmationLevel : IComparable<ConfirmationLevel>
+    public readonly struct ConfirmationLevel : IComparable<ConfirmationLevel>, IEquatable<ConfirmationLevel>
     {
         public static ConfirmationLevel Zero => default;
 
@@ -47,6 +48,12 @@ namespace VASPSuite.EtherGate
         {
             return _value;
         }
+
+        public static ConfirmationLevel Parse(
+            string value)
+        {
+            return new ConfirmationLevel(int.Parse(value, CultureInfo.InvariantCulture));
+        }
         
         public static bool operator <(
             ConfirmationLevel left,
@@ -74,6 +81,20 @@ namespace VASPSuite.EtherGate
             ConfirmationLevel right) 
         {
             return left.CompareTo(right) >= 0;
+        }
+        
+        public static bool operator ==(
+            ConfirmationLevel left,
+            ConfirmationLevel right) 
+        {
+            return left.Equals(right);
+        }
+        
+        public static bool operator !=(
+            ConfirmationLevel left,
+            ConfirmationLevel right) 
+        {
+            return !left.Equals(right);
         }
         
         public static implicit operator BigInteger(

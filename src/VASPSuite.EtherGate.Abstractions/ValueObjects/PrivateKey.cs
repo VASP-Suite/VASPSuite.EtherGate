@@ -1,31 +1,29 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using VASPSuite.EtherGate.Support;
 
 namespace VASPSuite.EtherGate
 {
-    [PublicAPI]
-    public readonly struct VASPId : IEquatable<VASPId>
+    public readonly struct PrivateKey : IEquatable<PrivateKey>
     {
         private readonly ByteArray<Digest> _value;
-
         
-        public VASPId(
+        
+        public PrivateKey(
             IEnumerable<byte> value)
         {
             _value = new ByteArray<Digest>(value);
         }
         
-        private VASPId(
+        private PrivateKey(
             ByteArray<Digest> value)
         {
             _value = value;
         }
-
+        
         
         public bool Equals(
-            VASPId other)
+            PrivateKey other)
         {
             return _value.Equals(other._value);
         }
@@ -33,62 +31,62 @@ namespace VASPSuite.EtherGate
         public override bool Equals(
             object? obj)
         {
-            return obj is VASPId other && Equals(other);
+            return obj is PrivateKey other && Equals(other);
         }
 
         public override int GetHashCode()
         {
             return _value.GetHashCode();
         }
-
+        
         public override string ToString()
         {
             return _value.ToString();
         }
 
         public static bool IsEmpty(
-            VASPId vaspId)
+            PrivateKey privateKey)
         {
-            return ByteArray<Digest>.IsEmpty(vaspId._value);
+            return ByteArray<Digest>.IsEmpty(privateKey._value);
         }
         
-        public static VASPId Parse(
+        public static PrivateKey Parse(
             string value)
         {
-            return new VASPId(ByteArray<Digest>.Parse(value));
+            return new PrivateKey(ByteArray<Digest>.Parse(value));
         }
 
         public static bool operator ==(
-            VASPId left,
-            VASPId right)
+            PrivateKey left,
+            PrivateKey right)
         {
             return left.Equals(right);
         }
 
         public static bool operator !=(
-            VASPId left,
-            VASPId right)
+            PrivateKey left,
+            PrivateKey right)
         {
             return !left.Equals(right);
         }
         
         public static implicit operator byte[](
-            VASPId vaspId)
+            PrivateKey privateKey)
         {
-            return vaspId._value.ToBytes();
+            return privateKey._value.ToBytes();
         }
-        
-        
+
+
         internal class Digest : ByteArrayDigest
         {
             public override bool HasHexPrefix
-                => false;
+                => true;
 
             public override int Length
-                => 6;
+                => 32;
 
             public override string RegexPattern
-                => @"^[0-9a-f]{12}$";
+                => @"^0x[0-9a-f]{64}$";
         }
     }
 }

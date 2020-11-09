@@ -25,7 +25,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\VASPSuite.EtherGate\VASPSuite.EtherGate.csproj" />
     </ItemGroup>
-
+    
     <Target Name="CopyFeatureExamples" BeforeTargets="BeforeUpdateFeatureFilesInProject">
         <ItemGroup>
             <EtherGateFeatureExamplesFiles Include="..\..\features\Examples\**\*.*" />

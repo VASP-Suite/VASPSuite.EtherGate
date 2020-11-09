@@ -2,6 +2,8 @@ using Autofac.Builder;
 using JetBrains.Annotations;
 using Nethereum.Web3;
 using VASPSuite.EtherGate;
+using VASPSuite.EtherGate.Strategies;
+using VASPSuite.EtherGate.Strategy;
 
 // ReSharper disable once CheckNamespace
 namespace Autofac
@@ -9,6 +11,9 @@ namespace Autofac
     #region Shorthands
 
     // ReSharper disable IdentifierTypo
+    
+    using IBlockchainOperationServiceRegistrationBuilder
+        = IRegistrationBuilder<IBlockchainOperationsService, SimpleActivatorData, SingleRegistrationStyle>;
     
     using IVASPContractClientFactoryRegistrationBuilder 
         = IRegistrationBuilder<IVASPContractClientFactory, SimpleActivatorData, SingleRegistrationStyle>;
@@ -26,13 +31,36 @@ namespace Autofac
     [PublicAPI]
     public static class ContainerBuilderExtensions
     {
+        internal static ContainerBuilder RegisterDefaultEstimateGasPriceStrategy(
+            this ContainerBuilder containerBuilder)
+        {
+            containerBuilder
+                .RegisterType<DefaultEstimateGasPriceStrategy>()
+                .As<IEstimateGasPriceStrategy>()
+                .IfNotRegistered(typeof(IEstimateGasPriceStrategy));
+
+            return containerBuilder;
+        }
+        
+        public static IBlockchainOperationServiceRegistrationBuilder RegisterBlockchainOperationsService(
+            this ContainerBuilder containerBuilder)
+        {
+            return containerBuilder
+                .Register<IBlockchainOperationsService>(context => new BlockchainOperationsService
+                (
+                    web3: context.Resolve<IWeb3>()
+                ));
+        }
+        
         public static IVASPContractClientFactoryRegistrationBuilder RegisterVASPContractClientFactory(
             this ContainerBuilder containerBuilder)
         {
             return containerBuilder
+                .RegisterDefaultEstimateGasPriceStrategy()
                 .Register<IVASPContractClientFactory>(context => new VASPContractClientFactory
                 (
-                        web3: context.Resolve<IWeb3>()
+                    estimateGasPriceStrategy: context.Resolve<IEstimateGasPriceStrategy>(),
+                    web3: context.Resolve<IWeb3>()
                 ));
         }
 
@@ -41,9 +69,11 @@ namespace Autofac
             Address vaspDirectoryAddress)
         {
             return containerBuilder
+                .RegisterDefaultEstimateGasPriceStrategy()
                 .Register<IVASPDirectoryClient>(context => new VASPDirectoryClient
                 (
                     address: vaspDirectoryAddress,
+                    estimateGasPriceStrategy: context.Resolve<IEstimateGasPriceStrategy>(),
                     web3: context.Resolve<IWeb3>()
                 ));
         }
@@ -53,6 +83,7 @@ namespace Autofac
             string vaspDirectoryAddress)
         {
             return containerBuilder
+                .RegisterDefaultEstimateGasPriceStrategy()
                 .RegisterVASPDirectoryClient
                 (
                     vaspDirectoryAddress: Address.Parse(vaspDirectoryAddress)
@@ -64,9 +95,11 @@ namespace Autofac
             Address vaspIndexAddress)
         {
             return containerBuilder
+                .RegisterDefaultEstimateGasPriceStrategy()
                 .Register<IVASPIndexClient>(context => new VASPIndexClient
                 (
                     address: vaspIndexAddress,
+                    estimateGasPriceStrategy: context.Resolve<IEstimateGasPriceStrategy>(),
                     web3: context.Resolve<IWeb3>()
                 ));
         }
@@ -76,6 +109,7 @@ namespace Autofac
             string vaspIndexAddress)
         {
             return containerBuilder
+                .RegisterDefaultEstimateGasPriceStrategy()
                 .RegisterVASPIndexClient
                 (
                     vaspIndexAddress: Address.Parse(vaspIndexAddress)

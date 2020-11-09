@@ -4,6 +4,7 @@ using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using VASPSuite.EtherGate.Extensions;
+using VASPSuite.EtherGate.Strategies;
 
 namespace VASPSuite.EtherGate
 {
@@ -12,8 +13,9 @@ namespace VASPSuite.EtherGate
     {
         public VASPContractClient(
             Address address,
+            IEstimateGasPriceStrategy estimateGasPriceStrategy,
             IWeb3 web3)
-            : base(address, web3)
+            : base(address, estimateGasPriceStrategy, web3)
         {
         }
 
@@ -118,11 +120,11 @@ namespace VASPSuite.EtherGate
             
             return new VASPInfo
             (
-                channels: getChannels.Result,
-                vaspCode: getVASPCode.Result,
-                messageKey: getMessageKey.Result,
-                signingKey: getSigningKey.Result,
-                transportKey: getTransportKey.Result
+                channels:     await getChannels,
+                vaspCode:     await getVASPCode,
+                messageKey:   await getMessageKey,
+                signingKey:   await getSigningKey,
+                transportKey: await getTransportKey
             );
         }
 

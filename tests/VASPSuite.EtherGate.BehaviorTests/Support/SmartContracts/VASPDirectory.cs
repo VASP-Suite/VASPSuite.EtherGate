@@ -20,7 +20,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
         }
 
 
-        public async Task InsertCredentials(
+        public async Task InsertCredentialsAsync(
             Address administrator,
             VASPId vaspId,
             string credentials)

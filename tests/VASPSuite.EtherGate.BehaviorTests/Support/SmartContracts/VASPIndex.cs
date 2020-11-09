@@ -111,7 +111,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
             (
                 receipt.Logs[5]["topics"][2]
                     .ToString()
-                    .Replace("0x000000000000000000000000", "0x")
+                    .Replace
+                    (
+                        "0x000000000000000000000000",
+                        "0x",
+                        System.StringComparison.OrdinalIgnoreCase
+                    )
             );
         }
     }

@@ -2,7 +2,7 @@ using System;
 
 namespace VASPSuite.EtherGate.BehaviorTests.Support
 {
-    internal static class KeyGenerator
+    internal static class MockKeyGenerator
     {
         private static readonly Random Random = new Random();
         

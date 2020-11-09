@@ -4,7 +4,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
 {
     public abstract class SmartContract
     {
-        public SmartContract(
+        protected SmartContract(
             Address address,
             IWeb3 web3)
         {

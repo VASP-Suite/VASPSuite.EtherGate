@@ -18,7 +18,7 @@ namespace VASPSuite.EtherGate
         public bool Equals(
             VASPCredentialsRef other)
         {
-            return _value == other._value;
+            return string.Equals(_value, other._value, StringComparison.Ordinal);
         }
 
         public override bool Equals(
@@ -29,7 +29,7 @@ namespace VASPSuite.EtherGate
 
         public override int GetHashCode()
         {
-            return _value.GetHashCode();
+            return StringComparer.Ordinal.GetHashCode(_value);
         }
         
         public override string ToString()

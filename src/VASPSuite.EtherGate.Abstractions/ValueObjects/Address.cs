@@ -66,8 +66,19 @@ namespace VASPSuite.EtherGate
         public static Address Parse(
             string value)
         {
-            var isAllLowerCase = value == value.ToLowerInvariant();
-            var isValidMixedCase = value == AddressUtil.Current.ConvertToChecksumAddress(value);
+            var isAllLowerCase = string.Equals
+            (
+                value,
+                value.ToLowerInvariant(),
+                StringComparison.Ordinal
+            );
+
+            var isValidMixedCase = string.Equals
+            (
+                value,
+                AddressUtil.Current.ConvertToChecksumAddress(value),
+                StringComparison.Ordinal
+            );
             
             if (!isAllLowerCase && !isValidMixedCase)
             {

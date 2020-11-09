@@ -1,31 +1,28 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using VASPSuite.EtherGate.Support;
 
 namespace VASPSuite.EtherGate
 {
-    [PublicAPI]
-    public readonly struct VASPId : IEquatable<VASPId>
+    public readonly struct BlockchainOperationId : IEquatable<BlockchainOperationId>
     {
         private readonly ByteArray<Digest> _value;
-
         
-        public VASPId(
+        
+        public BlockchainOperationId(
             IEnumerable<byte> value)
         {
             _value = new ByteArray<Digest>(value);
         }
         
-        private VASPId(
+        private BlockchainOperationId(
             ByteArray<Digest> value)
         {
             _value = value;
         }
-
         
         public bool Equals(
-            VASPId other)
+            BlockchainOperationId other)
         {
             return _value.Equals(other._value);
         }
@@ -33,7 +30,7 @@ namespace VASPSuite.EtherGate
         public override bool Equals(
             object? obj)
         {
-            return obj is VASPId other && Equals(other);
+            return obj is BlockchainOperationId other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -47,48 +44,48 @@ namespace VASPSuite.EtherGate
         }
 
         public static bool IsEmpty(
-            VASPId vaspId)
+            BlockchainOperationId operationId)
         {
-            return ByteArray<Digest>.IsEmpty(vaspId._value);
+            return ByteArray<Digest>.IsEmpty(operationId._value);
         }
         
-        public static VASPId Parse(
+        public static BlockchainOperationId Parse(
             string value)
         {
-            return new VASPId(ByteArray<Digest>.Parse(value));
+            return new BlockchainOperationId(ByteArray<Digest>.Parse(value));
         }
 
         public static bool operator ==(
-            VASPId left,
-            VASPId right)
+            BlockchainOperationId left,
+            BlockchainOperationId right)
         {
             return left.Equals(right);
         }
 
         public static bool operator !=(
-            VASPId left,
-            VASPId right)
+            BlockchainOperationId left,
+            BlockchainOperationId right)
         {
             return !left.Equals(right);
         }
-        
-        public static implicit operator byte[](
-            VASPId vaspId)
+
+        public static implicit operator string(
+            BlockchainOperationId id)
         {
-            return vaspId._value.ToBytes();
+            return id._value.ToString();
         }
         
         
         internal class Digest : ByteArrayDigest
         {
             public override bool HasHexPrefix
-                => false;
+                => true;
 
             public override int Length
-                => 6;
+                => 32;
 
             public override string RegexPattern
-                => @"^[0-9a-f]{12}$";
+                => @"^0x[0-9a-f]{64}$";
         }
     }
 }

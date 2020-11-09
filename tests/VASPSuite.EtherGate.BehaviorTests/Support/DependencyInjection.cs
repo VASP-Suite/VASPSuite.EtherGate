@@ -4,6 +4,8 @@ using Nethereum.Web3;
 using SpecFlow.Autofac;
 using VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts;
 using VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions;
+using VASPSuite.EtherGate.Strategies;
+using VASPSuite.EtherGate.Strategy;
 
 namespace VASPSuite.EtherGate.BehaviorTests.Support
 {
@@ -14,7 +16,17 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support
         public static ContainerBuilder CreateContainerBuilder()
         {
             var builder = new ContainerBuilder();
+            
+            builder
+                .RegisterType<Web3>()
+                .As<IWeb3>()
+                .SingleInstance();
 
+            builder
+                .RegisterType<DefaultEstimateGasPriceStrategy>()
+                .As<IEstimateGasPriceStrategy>()
+                .SingleInstance();
+            
             builder
                 .RegisterType<Accounts>()
                 .SingleInstance();
@@ -35,11 +47,6 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support
                 .RegisterType<Thens>()
                 .SingleInstance();
             
-            builder
-                .RegisterType<Web3>()
-                .As<IWeb3>()
-                .SingleInstance();
-
             
             return builder;
         }
