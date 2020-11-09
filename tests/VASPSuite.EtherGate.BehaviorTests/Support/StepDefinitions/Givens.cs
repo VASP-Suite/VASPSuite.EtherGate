@@ -42,8 +42,8 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             var vaspDirectory = await _smartContractDeployer.DeployVASPDirectoryAsync
             (
-                owner: _accounts.Owner,
-                administrator: _accounts.Administrator
+                owner: await _accounts.GetOwnerAsync(),
+                administrator: await _accounts.GetAdministratorAsync()
             );
             
             _scenarioContext.RegisterContract(vaspDirectory);
@@ -52,8 +52,9 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         [Given(@"VASPIndex smart contract was deployed")]
         public async Task VASPIndexSmartContractWasDeployed()
         {
+            var owner = await _accounts.GetOwnerAsync();
             var vaspContractFactory = await _smartContractDeployer.DeployVASPContractFactoryAsync();
-            var vaspIndex = await _smartContractDeployer.DeployVASPIndexAsync(_accounts.Owner, vaspContractFactory);
+            var vaspIndex = await _smartContractDeployer.DeployVASPIndexAsync(owner, vaspContractFactory);
             
             _scenarioContext.RegisterContract(vaspIndex);
         }
@@ -66,13 +67,13 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             
             var vaspContract = await vaspIndex.CreateVASPContractAsync
             (
-                vaspContractCreator: _accounts.Deployer,
+                vaspContractCreator: await _accounts.GetDeployerAsync(),
                 vaspCode: VASPCode.Parse(vaspCode),
-                vaspContractOwner: _accounts.Owner,
+                vaspContractOwner: await _accounts.GetOwnerAsync(),
                 channels: Channels.Parse("0x00000001"),
-                transportKey: KeyGenerator.GenerateTransportKey(),
-                messageKey: KeyGenerator.GenerateMessageKey(),
-                signingKey: KeyGenerator.GenerateSigningKey()
+                transportKey: MockKeyGenerator.GenerateTransportKey(),
+                messageKey: MockKeyGenerator.GenerateMessageKey(),
+                signingKey: MockKeyGenerator.GenerateSigningKey()
             );
             
             _scenarioContext.RegisterContract(vaspContract);
@@ -87,67 +88,67 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             
             var vaspContract = await vaspIndex.CreateVASPContractAsync
             (
-                vaspContractCreator: _accounts.Deployer,
+                vaspContractCreator: await _accounts.GetDeployerAsync(),
                 fakeVASPContractAddress: Address.Parse(vaspContractAddress), 
                 vaspCode: VASPCode.Parse(vaspCode),
-                vaspContractOwner: _accounts.Owner,
+                vaspContractOwner: await _accounts.GetOwnerAsync(),
                 channels: Channels.Parse("0x00000001"),
-                transportKey: KeyGenerator.GenerateTransportKey(),
-                messageKey: KeyGenerator.GenerateMessageKey(),
-                signingKey: KeyGenerator.GenerateSigningKey()
+                transportKey: MockKeyGenerator.GenerateTransportKey(),
+                messageKey: MockKeyGenerator.GenerateMessageKey(),
+                signingKey: MockKeyGenerator.GenerateSigningKey()
             );
             
             _scenarioContext.RegisterContract(vaspContract);
         }
         
         [Given(@"VASP set its contract channels to (.*)")]
-        public Task VASPSetItsContractChannelsTo(
+        public async Task VASPSetItsContractChannelsTo(
             string channels)
         {
-            return _scenarioContext
+            await _scenarioContext
                 .GetContractByType<VASPContract>()
                 .SetChannels
                 (
-                    owner: _accounts.Owner,
+                    owner: await _accounts.GetOwnerAsync(),
                     channels: Channels.Parse(channels)
                 );
         }
         
         [Given(@"VASP set its contract message key to (.*)")]
-        public Task VASPSetItsContractMessageKeyTo(
+        public async Task VASPSetItsContractMessageKeyTo(
             string messageKey)
         {
-            return _scenarioContext
+            await _scenarioContext
                 .GetContractByType<VASPContract>()
                 .SetMessageKey
                 (
-                    owner: _accounts.Owner,
+                    owner: await _accounts.GetOwnerAsync(),
                     messageKey: MessageKey.Parse(messageKey)
                 );
         }
         
         [Given(@"VASP set its contract signing key to (.*)")]
-        public Task VASPSetItsContractSigningKeyTo(
+        public async Task VASPSetItsContractSigningKeyTo(
             string signingKey)
         {
-            return _scenarioContext
+            await _scenarioContext
                 .GetContractByType<VASPContract>()
                 .SetSigningKey
                 (
-                    owner: _accounts.Owner,
+                    owner: await _accounts.GetOwnerAsync(),
                     signingKey: SigningKey.Parse(signingKey)
                 );
         }
         
         [Given(@"VASP set its contract transport key to (.*)")]
-        public Task VASPSetItsContractTransportKeyTo(
+        public async Task VASPSetItsContractTransportKeyTo(
             string transportKey)
         {
-            return _scenarioContext
+            await _scenarioContext
                 .GetContractByType<VASPContract>()
                 .SetTransportKey
                 (
-                    owner: _accounts.Owner,
+                    owner: await _accounts.GetOwnerAsync(),
                     transportKey: TransportKey.Parse(transportKey)
                 );
         }
@@ -161,7 +162,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
 
             await vaspDirectory.InsertCredentials
             (
-                administrator: _accounts.Administrator,
+                administrator: await _accounts.GetAdministratorAsync(),
                 vaspId: VASPId.Parse(vaspId),
                 credentials: await File.ReadAllTextAsync(credentialsExamplePath)
             );

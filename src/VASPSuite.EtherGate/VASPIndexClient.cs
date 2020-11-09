@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Web3;
 
+
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
@@ -14,7 +15,9 @@ namespace VASPSuite.EtherGate
             IWeb3 web3)
             : base(address, web3)
         {
+            
         }
+        
         
         public async Task<VASPCode> GetVASPCodeAsync(
             Address vaspContractAddress,
@@ -28,7 +31,19 @@ namespace VASPSuite.EtherGate
 
             return new VASPCode(callResult);
         }
-        
+
+
+        public Task<IBlockchainOperation> CreateVASPContractAsync(
+            VASPCode vaspCode,
+            Address owner,
+            Channels channels,
+            TransportKey transportKey,
+            MessageKey messageKey,
+            SigningKey signingKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Address> GetVASPContractAddressAsync(
             VASPCode vaspCode,
             ConfirmationLevel minimalConfirmationLevel = default)

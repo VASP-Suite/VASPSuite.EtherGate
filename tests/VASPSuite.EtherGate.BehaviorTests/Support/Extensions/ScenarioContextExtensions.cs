@@ -12,6 +12,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.Extensions
         private const string ExceptionKey = "Exception";
 
         
+        public static object GetCallResult(
+            this ScenarioContext scenarioContext)
+        {
+            return scenarioContext[CallResultKey];
+        }
+        
         public static T GetCallResult<T>(
             this ScenarioContext scenarioContext)
         {

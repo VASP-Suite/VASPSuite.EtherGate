@@ -397,5 +397,48 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
                 _scenarioContext.SetException(e);
             }
         }
+        
+        [When(@"I call GenerateVASPCode method of a VASPCodeGenerator")]
+        public void ICallGenerateVASPCodeMethodOfVASPCodeGenerator()
+        {
+            try
+            {
+                var vaspCodeGenerator = new VASPCodeGenerator();
+                var callResult = vaspCodeGenerator.GenerateVASPCode();
+            
+                _scenarioContext.SetCallResult(callResult);
+            }
+            catch (Exception e)
+            {
+                _scenarioContext.SetException(e);
+            }
+        }
+
+        [When(@"I call GenerateMessageKey method of a VASPKeysGenerator")]
+        public void ICallGenerateMessageKeyMethodOfVASPKeysGenerator()
+        {
+            var vaspKeysGenerator = new VASPKeysGenerator();
+            var callResult = vaspKeysGenerator.GenerateMessageKey();
+            
+            _scenarioContext.SetCallResult(callResult);
+        }
+
+        [When(@"I call GenerateSigningKey method of a VASPKeysGenerator")]
+        public void ICallGenerateSigningKeyMethodOfVASPKeysGenerator()
+        {
+            var vaspKeysGenerator = new VASPKeysGenerator();
+            var callResult = vaspKeysGenerator.GenerateSigningKey();
+            
+            _scenarioContext.SetCallResult(callResult);
+        }
+        
+        [When(@"I call GenerateTransportKey method of a VASPKeysGenerator")]
+        public void ICallGenerateTransportKeyMethodOfVASPKeysGenerator()
+        {
+            var vaspKeysGenerator = new VASPKeysGenerator();
+            var callResult = vaspKeysGenerator.GenerateTransportKey();
+            
+            _scenarioContext.SetCallResult(callResult);
+        }
     }
 }

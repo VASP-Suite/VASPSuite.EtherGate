@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nethereum.ABI.FunctionEncoding.Attributes;
@@ -104,11 +105,33 @@ namespace VASPSuite.EtherGate
                 );
         }
 
+        protected async Task<TransactionReceipt> SendTransactionAndWaitForReceiptAsync<TParameters>(
+            TransactionDefinition<TParameters> transactionDefinition)
+            where TParameters : TransactionDefinition<TParameters>, new()
+        {
+            throw new NotImplementedException();
+
+            //var transactionInput = await Web3.Eth
+            //    .GetContractTransactionHandler<TParameters>()
+            //    .CreateTransactionInputEstimatingGasAsync
+            //    (
+            //        ContractAddress,
+            //        (TParameters) transactionDefinition
+            //    );
+        }
+        
         public class CallDefinition<TQuery, TResult> : FunctionMessage
             where TQuery : CallDefinition<TQuery, TResult>, new()
         {
             public static TQuery Empty
                 => new TQuery();
+        }
+
+        public class TransactionDefinition<TParameters> : FunctionMessage
+            where TParameters : TransactionDefinition<TParameters>, new()
+        {
+            public static TParameters Empty
+                => new TParameters();
         }
     }
 }

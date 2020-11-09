@@ -264,5 +264,46 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
                 .GetCallResult<Address>()
                 .ShouldBe(expectedResult);
         }
+        
+        [Then(@"the GenerateVASPCode call result should be a VASP code")]
+        public void GenerateVASPCodeCallResultShouldBeVASPCode()
+        {
+            _scenarioContext
+                .GetCallResult()
+                .ShouldBeOfType<VASPCode>();
+        }
+
+        [Then(@"the GenerateMessageKey call result should be a valid pair of message key and private key")]
+        public void GenerateMessageKeyCallResultShouldBeValidPairOfMessageKeyAndPrivateKey()
+        {
+            var (messageKey, privateKey) = _scenarioContext
+                .GetCallResult<(MessageKey, PrivateKey)>();
+            
+            VASPKeysPairValidator
+                .IsValid(messageKey, privateKey)
+                .ShouldBeTrue();
+        }
+        
+        [Then(@"the GenerateSigningKey call result should be a valid pair of signing key and private key")]
+        public void GenerateSigningKeyCallResultShouldBeValidPairOfSigningKeyAndPrivateKey()
+        {
+            var (signingKey, privateKey) = _scenarioContext
+                .GetCallResult<(SigningKey, PrivateKey)>();
+            
+            VASPKeysPairValidator
+                .IsValid(signingKey, privateKey)
+                .ShouldBeTrue();
+        }
+        
+        [Then(@"the GenerateTransportKey call result should be a valid pair of transport key and private key")]
+        public void GenerateTransportKeyCallResultShouldBeValidPairOfTransportKeyAndPrivateKey()
+        {
+            var (transportKey, privateKey) = _scenarioContext
+                .GetCallResult<(TransportKey, PrivateKey)>();
+            
+            VASPKeysPairValidator
+                .IsValid(transportKey, privateKey)
+                .ShouldBeTrue();
+        }
     }
 }

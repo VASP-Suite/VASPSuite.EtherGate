@@ -101,7 +101,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
             (
                 abi: abi,
                 contractByteCode: byteCode,
-                @from: _accounts.Deployer,
+                @from: await _accounts.GetDeployerAsync(),
                 values: constructorArguments
             );
 
@@ -109,7 +109,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
             (
                 abi: abi,
                 contractByteCode: byteCode,
-                @from: _accounts.Deployer,
+                @from: await _accounts.GetDeployerAsync(),
                 gas: gas,
                 receiptRequestCancellationToken: null,
                 values: constructorArguments

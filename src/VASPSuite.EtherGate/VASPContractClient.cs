@@ -118,11 +118,11 @@ namespace VASPSuite.EtherGate
             
             return new VASPInfo
             (
-                channels: getChannels.Result,
-                vaspCode: getVASPCode.Result,
-                messageKey: getMessageKey.Result,
-                signingKey: getSigningKey.Result,
-                transportKey: getTransportKey.Result
+                channels:     await getChannels,
+                vaspCode:     await getVASPCode,
+                messageKey:   await getMessageKey,
+                signingKey:   await getSigningKey,
+                transportKey: await getTransportKey
             );
         }
 

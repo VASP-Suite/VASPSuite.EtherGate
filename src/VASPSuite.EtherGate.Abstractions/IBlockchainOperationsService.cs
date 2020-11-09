@@ -1,0 +1,8 @@
+namespace VASPSuite.EtherGate
+{
+    public interface IBlockchainOperationsService
+    {
+        IBlockchainOperation GetOperation(
+            BlockchainOperationId operationId);
+    }
+}
