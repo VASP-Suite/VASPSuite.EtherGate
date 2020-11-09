@@ -1,8 +1,10 @@
+using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
+    [StructLayout(LayoutKind.Auto)]
     public readonly struct VASPInfo
     {
         public VASPInfo(

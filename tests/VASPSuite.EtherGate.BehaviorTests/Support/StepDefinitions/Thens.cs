@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Nethereum.Hex.HexConvertors.Extensions;
+using Nethereum.Web3;
 using Shouldly;
 using TechTalk.SpecFlow;
 using VASPSuite.EtherGate.BehaviorTests.Support.Extensions;
@@ -11,12 +13,15 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
     public class Thens
     {
         private readonly ScenarioContext _scenarioContext;
+        private readonly IWeb3 _web3;
         
         
         public Thens(
-            ScenarioContext scenarioContext)
+            ScenarioContext scenarioContext,
+            IWeb3 web3)
         {
             _scenarioContext = scenarioContext;
+            _web3 = web3;
         }
         
         
@@ -95,7 +100,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
                         .ShouldBe(VASPCode.Parse(propertyValue));
                     break;
                 default:
-                    throw new ArgumentException("Unexpected property name");
+                    throw new ArgumentException("Unexpected property name", nameof(propertyName));
             }
         }
         
@@ -304,6 +309,38 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             VASPKeysPairValidator
                 .IsValid(transportKey, privateKey)
                 .ShouldBeTrue();
+        }
+        
+        [Then(@"blockchain operation is started")]
+        public async Task ThenBlockchainOperationIsStarted()
+        {
+            var blockchainOperation = _scenarioContext.GetCallResult<BlockchainOperation>();
+            var transaction = await _web3.Eth.Transactions
+                .GetTransactionByHash
+                .SendRequestAsync(blockchainOperation.Id);
+            
+            transaction
+                .ShouldNotBeNull();
+        }
+        
+        [Then(@"blockchain operation is completed after (.*) blocks")]
+        public async Task ThenBlockchainOperationIsCompletedAfterNBlocks(
+            int numberOfBlocks)
+        {
+            for (var i = 0; i < numberOfBlocks; i++)
+            {
+                await _web3.MineBlockAsync();
+            }
+            
+            var blockchainOperation = _scenarioContext.GetCallResult<BlockchainOperation>();
+
+            await blockchainOperation.WaitForExecutionAsync();
+
+            var blockchainOperationState = await blockchainOperation.GetCurrentStateAsync();
+
+
+            blockchainOperationState
+                .ShouldBeOfType<BlockchainOperationState.Completed>();
         }
     }
 }

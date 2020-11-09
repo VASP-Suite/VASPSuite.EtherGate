@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using VASPSuite.EtherGate.Support;
@@ -5,7 +6,7 @@ using VASPSuite.EtherGate.Support;
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
-    public readonly struct VASPId
+    public readonly struct VASPId : IEquatable<VASPId>
     {
         private readonly ByteArray<Digest> _value;
 

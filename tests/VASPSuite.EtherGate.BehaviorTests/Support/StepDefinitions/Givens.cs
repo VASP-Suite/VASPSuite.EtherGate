@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Nethereum.Web3;
@@ -8,6 +9,7 @@ using VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts;
 namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
 {
     [Binding]
+    [SuppressMessage("ReSharper", "VSTHRD200")]
     public class Givens
     {
         private readonly Accounts _accounts;
@@ -107,7 +109,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             await _scenarioContext
                 .GetContractByType<VASPContract>()
-                .SetChannels
+                .SetChannelsAsync
                 (
                     owner: await _accounts.GetOwnerAsync(),
                     channels: Channels.Parse(channels)
@@ -120,7 +122,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             await _scenarioContext
                 .GetContractByType<VASPContract>()
-                .SetMessageKey
+                .SetMessageKeyAsync
                 (
                     owner: await _accounts.GetOwnerAsync(),
                     messageKey: MessageKey.Parse(messageKey)
@@ -133,7 +135,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             await _scenarioContext
                 .GetContractByType<VASPContract>()
-                .SetSigningKey
+                .SetSigningKeyAsync
                 (
                     owner: await _accounts.GetOwnerAsync(),
                     signingKey: SigningKey.Parse(signingKey)
@@ -146,7 +148,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             await _scenarioContext
                 .GetContractByType<VASPContract>()
-                .SetTransportKey
+                .SetTransportKeyAsync
                 (
                     owner: await _accounts.GetOwnerAsync(),
                     transportKey: TransportKey.Parse(transportKey)
@@ -160,12 +162,20 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
 
-            await vaspDirectory.InsertCredentials
+            await vaspDirectory.InsertCredentialsAsync
             (
                 administrator: await _accounts.GetAdministratorAsync(),
                 vaspId: VASPId.Parse(vaspId),
                 credentials: await File.ReadAllTextAsync(credentialsExamplePath)
             );
+        }
+
+        [Given(@"input parameter ""(.*)"" is set to ""(.*)""")]
+        public void InputParameterIsSetTo(
+            string parameterName,
+            string parameterValue)
+        {
+            _scenarioContext.SetParameter(parameterName, parameterValue);
         }
     }
 }

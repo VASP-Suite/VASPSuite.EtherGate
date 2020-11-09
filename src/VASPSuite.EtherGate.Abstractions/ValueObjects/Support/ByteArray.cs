@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Nethereum.Hex.HexConvertors.Extensions;
 
 namespace VASPSuite.EtherGate.Support
 {
+    [StructLayout(LayoutKind.Auto)]
     internal readonly struct ByteArray<T> : IEquatable<ByteArray<T>>
         where T : ByteArrayDigest, new()
     {
@@ -72,7 +75,7 @@ namespace VASPSuite.EtherGate.Support
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < Digest.Length; i++)
             {
-                hexStringBuilder.Append(_value[i].ToString("x2"));
+                hexStringBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", _value[i]);
             }
 
             return hexStringBuilder.ToString();

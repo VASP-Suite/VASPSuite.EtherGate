@@ -7,12 +7,14 @@ namespace VASPSuite.EtherGate
     public interface IVASPIndexClient : ISmartContractClient
     {
         Task<IBlockchainOperation> CreateVASPContractAsync(
+            Address from,
             VASPCode vaspCode,
             Address owner,
             Channels channels,
             TransportKey transportKey,
-            MessageKey messageKey,
-            SigningKey signingKey);
+            MessageKey messageKey, 
+            SigningKey signingKey,
+            ConfirmationLevel minimalConfirmationLevel = default);
         
         Task<Address> GetVASPContractAddressAsync(
             VASPCode vaspCode,

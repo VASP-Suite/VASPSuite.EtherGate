@@ -1,11 +1,24 @@
+using JetBrains.Annotations;
+using Nethereum.Web3;
+
 namespace VASPSuite.EtherGate
 {
-    public class BlockchainOperationsService : IBlockchainOperationsService
+    [PublicAPI]
+    public sealed class BlockchainOperationsService : IBlockchainOperationsService
     {
-        public IBlockchainOperation GetOperation(
-            BlockchainOperationId operationId)
+        private readonly IWeb3 _web3;
+
+        public BlockchainOperationsService(
+            IWeb3 web3)
         {
-            throw new System.NotImplementedException();
+            _web3 = web3;
+        }
+
+        public IBlockchainOperation GetOperation(
+            BlockchainOperationId operationId,
+            ConfirmationLevel minimalConfirmationLevel = default)
+        {
+            return new BlockchainOperation(operationId, _web3, minimalConfirmationLevel);
         }
     }
 }

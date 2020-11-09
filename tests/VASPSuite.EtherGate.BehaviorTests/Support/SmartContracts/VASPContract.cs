@@ -30,35 +30,35 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts
         }
 
 
-        public Task SetChannels(
+        public Task SetChannelsAsync(
             Address owner,
             Channels channels)
         {
-            return SetProperty(owner, "setChannels", (byte[]) channels);
+            return SetPropertyAsync(owner, "setChannels", (byte[]) channels);
         }
         
-        public Task SetMessageKey(
+        public Task SetMessageKeyAsync(
             Address owner,
             MessageKey messageKey)
         {
-            return SetProperty(owner, "setMessageKey", (byte[]) messageKey);
+            return SetPropertyAsync(owner, "setMessageKey", (byte[]) messageKey);
         }
         
-        public Task SetSigningKey(
+        public Task SetSigningKeyAsync(
             Address owner,
             SigningKey signingKey)
         {
-            return SetProperty(owner, "setSigningKey", (byte[]) signingKey);
+            return SetPropertyAsync(owner, "setSigningKey", (byte[]) signingKey);
         }
         
-        public Task SetTransportKey(
+        public Task SetTransportKeyAsync(
             Address owner,
             TransportKey transportKey)
         {
-            return SetProperty(owner, "setTransportKey", (byte[]) transportKey);
+            return SetPropertyAsync(owner, "setTransportKey", (byte[]) transportKey);
         }
 
-        private async Task SetProperty(
+        private async Task SetPropertyAsync(
             Address owner,
             string functionName,
             object value)

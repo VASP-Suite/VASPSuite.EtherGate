@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace VASPSuite.EtherGate
 {
     public abstract class BlockchainOperationState
@@ -26,12 +28,12 @@ namespace VASPSuite.EtherGate
         public sealed class WaitingForConfirmation : BlockchainOperationState
         {
             public WaitingForConfirmation(
-                ConfirmationLevel remainingConfirmationLevel)
+                BigInteger remainingNumberOfConfirmations)
             {
-                RemainingConfirmationLevel = remainingConfirmationLevel;
+                RemainingNumberOfConfirmations = remainingNumberOfConfirmations;
             }
             
-            public ConfirmationLevel RemainingConfirmationLevel { get; }
+            public BigInteger RemainingNumberOfConfirmations { get; }
         }
     }
 }

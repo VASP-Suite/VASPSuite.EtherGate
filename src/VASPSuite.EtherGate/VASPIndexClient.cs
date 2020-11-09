@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Web3;
-
+using VASPSuite.EtherGate.Strategies;
 
 namespace VASPSuite.EtherGate
 {
@@ -12,8 +12,9 @@ namespace VASPSuite.EtherGate
     {
         public VASPIndexClient(
             Address address,
+            IEstimateGasPriceStrategy estimateGasPriceStrategy,
             IWeb3 web3)
-            : base(address, web3)
+            : base(address, estimateGasPriceStrategy, web3)
         {
             
         }
@@ -33,15 +34,30 @@ namespace VASPSuite.EtherGate
         }
 
 
-        public Task<IBlockchainOperation> CreateVASPContractAsync(
+        public async Task<IBlockchainOperation> CreateVASPContractAsync(
+            Address from,
             VASPCode vaspCode,
             Address owner,
             Channels channels,
             TransportKey transportKey,
             MessageKey messageKey,
-            SigningKey signingKey)
+            SigningKey signingKey,
+            ConfirmationLevel minimalConfirmationLevel = default)
         {
-            throw new NotImplementedException();
+            return await SendTransactionAsync
+            (
+                from,
+                new CreateVASPContractTransaction
+                {
+                    VASPCode = vaspCode,
+                    Owner = owner,
+                    Channels = channels,
+                    TransportKey = transportKey,
+                    MessageKey = messageKey,
+                    SigningKey = signingKey
+                },
+                minimalConfirmationLevel
+            );
         }
 
         public async Task<Address> GetVASPContractAddressAsync(
@@ -86,6 +102,45 @@ namespace VASPSuite.EtherGate
             // ReSharper disable once RedundantArgumentDefaultValue
             [Parameter("address", "vaspAddress", 1)]
             public string VASPAddress { get; set; }
+        }
+
+        [Function("createVASPContract", "address")]
+        public class CreateVASPContractTransaction : TransactionDefinition<CreateVASPContractTransaction>
+        {
+            public CreateVASPContractTransaction()
+            {
+                VASPCode = Array.Empty<byte>();
+                Owner = string.Empty;
+                Channels = Array.Empty<byte>();
+                TransportKey = Array.Empty<byte>();
+                MessageKey = Array.Empty<byte>();
+                SigningKey = Array.Empty<byte>();
+            }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            // ReSharper disable once RedundantArgumentDefaultValue
+            [Parameter("bytes4", "vaspCode", 1)]
+            public byte[] VASPCode { get; set; }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            [Parameter("address", "owner", 2)]
+            public string Owner { get; set; }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            [Parameter("bytes4", "channels", 3)]
+            public byte[] Channels { get; set; }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            [Parameter("bytes", "transportKey", 4)]
+            public byte[] TransportKey { get; set; }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            [Parameter("bytes", "messageKey", 5)]
+            public byte[] MessageKey { get; set; }
+            
+            [UsedImplicitly(ImplicitUseKindFlags.Access)]
+            [Parameter("bytes", "signingKey", 6)]
+            public byte[] SigningKey { get; set; }
         }
         
         #endregion

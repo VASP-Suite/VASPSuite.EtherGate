@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Nethereum.Hex.HexConvertors.Extensions;
@@ -6,19 +7,27 @@ using Nethereum.Web3;
 using TechTalk.SpecFlow;
 using VASPSuite.EtherGate.BehaviorTests.Support.Extensions;
 using VASPSuite.EtherGate.BehaviorTests.Support.SmartContracts;
+using VASPSuite.EtherGate.Strategies;
 
 namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
 {
     [Binding]
+    [SuppressMessage("ReSharper", "VSTHRD200")]
     public class Whens
     {
+        private readonly Accounts _accounts;
+        private readonly IEstimateGasPriceStrategy _estimateGasPriceStrategy;
         private readonly ScenarioContext _scenarioContext;
         private readonly IWeb3 _web3;
         
         public Whens(
+            Accounts accounts,
+            IEstimateGasPriceStrategy estimateGasPriceStrategy,
             ScenarioContext scenarioContext,
             IWeb3 web3)
         {
+            _accounts = accounts;
+            _estimateGasPriceStrategy = estimateGasPriceStrategy;
             _scenarioContext = scenarioContext;
             _web3 = web3;
         }
@@ -30,7 +39,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspContractClient
                 .GetChannelsAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -44,7 +58,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspContractClient
                 .GetMessageKeyAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -58,7 +77,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspContractClient
                 .GetSigningKeyAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -72,7 +96,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspContractClient
                 .GetTransportKeyAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -86,7 +115,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspContractClient
                 .GetVASPCodeAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -100,7 +134,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspContract = _scenarioContext.GetContractByType<VASPContract>();
-            var vaspContractClient = new EtherGate.VASPContractClient(vaspContract.RealAddress, _web3);
+            var vaspContractClient = new VASPContractClient
+            (
+                vaspContract.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspContractClient
                 .GetVASPInfoAsync(new ConfirmationLevel(minimalConfirmationLevel));
@@ -116,7 +155,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspDirectoryClient.GetCredentialsAsync
             (
@@ -135,7 +179,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspDirectoryClient.GetCredentialsRefAndHashAsync
             (
@@ -153,7 +202,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspDirectoryClient.VASPIsRegisteredAsync
             (
@@ -171,7 +225,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
-            var vaspIndexClient = new EtherGate.VASPIndexClient(vaspIndex.RealAddress, _web3);
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspIndexClient.GetVASPCodeAsync
             (
@@ -189,7 +248,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
-            var vaspIndexClient = new EtherGate.VASPIndexClient(vaspIndex.RealAddress, _web3);
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspIndexClient.GetVASPContractAddressAsync
             (
@@ -207,7 +271,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
-            var vaspIndexClient = new EtherGate.VASPIndexClient(vaspIndex.RealAddress, _web3);
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspIndexClient.TryGetVASPCodeAsync
             (
@@ -225,7 +294,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
-            var vaspIndexClient = new EtherGate.VASPIndexClient(vaspIndex.RealAddress, _web3);
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspIndexClient.TryGetVASPContractAddressAsync
             (
@@ -243,7 +317,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
 
             var callResult = await vaspDirectoryClient.TryGetCredentialsAsync
             (
@@ -261,7 +340,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspDirectoryClient.TryGetCredentialsRefAndHashAsync
             (
@@ -279,7 +363,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             int minimalConfirmationLevel)
         {
             var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
-            var vaspIndexClient = new EtherGate.VASPIndexClient(vaspIndex.RealAddress, _web3);
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             // ReSharper disable once ConvertSwitchStatementToSwitchExpression
             switch (vaspCodeOrContractAddress.Length)
@@ -344,7 +433,12 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             string credentialsHash)
         {
             var vaspDirectory = _scenarioContext.GetContractByType<VASPDirectory>();
-            var vaspDirectoryClient = new EtherGate.VASPDirectoryClient(vaspDirectory.RealAddress, _web3);
+            var vaspDirectoryClient = new VASPDirectoryClient
+            (
+                vaspDirectory.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
             
             var callResult = await vaspDirectoryClient.ValidateCredentialsAsync
             (
@@ -361,7 +455,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             string credentialsExamplePath,
             string credentialsHash)
         {
-            var callResult = EtherGate.VASPRegistryClient.ValidateCredentialsOffline
+            var callResult = VASPRegistryClient.ValidateCredentialsOffline
             (
                 credentials: File.ReadAllText(credentialsExamplePath),
                 credentialsHash: VASPCredentialsHash.Parse(credentialsHash)
@@ -383,6 +477,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         }
         
         [When(@"I call Parse method of the Address struct with a following parameter: ""(.*)""")]
+        // ReSharper disable once InconsistentNaming
         public void ICallParseMethodOfAddressStruct(
             string addressString)
         {
@@ -397,8 +492,9 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
                 _scenarioContext.SetException(e);
             }
         }
-        
+
         [When(@"I call GenerateVASPCode method of a VASPCodeGenerator")]
+        // ReSharper disable once InconsistentNaming
         public void ICallGenerateVASPCodeMethodOfVASPCodeGenerator()
         {
             try
@@ -415,6 +511,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         }
 
         [When(@"I call GenerateMessageKey method of a VASPKeysGenerator")]
+        // ReSharper disable once InconsistentNaming
         public void ICallGenerateMessageKeyMethodOfVASPKeysGenerator()
         {
             var vaspKeysGenerator = new VASPKeysGenerator();
@@ -424,6 +521,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
         }
 
         [When(@"I call GenerateSigningKey method of a VASPKeysGenerator")]
+        // ReSharper disable once InconsistentNaming
         public void ICallGenerateSigningKeyMethodOfVASPKeysGenerator()
         {
             var vaspKeysGenerator = new VASPKeysGenerator();
@@ -431,12 +529,40 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.StepDefinitions
             
             _scenarioContext.SetCallResult(callResult);
         }
-        
+
         [When(@"I call GenerateTransportKey method of a VASPKeysGenerator")]
+        // ReSharper disable once InconsistentNaming
         public void ICallGenerateTransportKeyMethodOfVASPKeysGenerator()
         {
             var vaspKeysGenerator = new VASPKeysGenerator();
             var callResult = vaspKeysGenerator.GenerateTransportKey();
+            
+            _scenarioContext.SetCallResult(callResult);
+        }
+        
+        [When(@"I call CreateVASPContractAsync method of a VASPIndexClient with given parameters")]
+        // ReSharper disable once InconsistentNaming
+        public async Task ICallCreateVASPContractAsyncMethodOfVASPIndexClientWithGivenParameters()
+        {
+            var vaspIndex = _scenarioContext.GetContractByType<VASPIndex>();
+            var vaspIndexClient = new VASPIndexClient
+            (
+                vaspIndex.RealAddress,
+                _estimateGasPriceStrategy,
+                _web3
+            );
+
+            var callResult = await vaspIndexClient.CreateVASPContractAsync
+            (
+                from: await _accounts.GetDeployerAsync(),
+                vaspCode: VASPCode.Parse(_scenarioContext.GetParameter("vaspCode")),
+                owner: Address.Parse(_scenarioContext.GetParameter("owner")),
+                channels: Channels.Parse(_scenarioContext.GetParameter("channels")),
+                transportKey: TransportKey.Parse(_scenarioContext.GetParameter("transportKey")),
+                messageKey: MessageKey.Parse(_scenarioContext.GetParameter("messageKey")),
+                signingKey: SigningKey.Parse(_scenarioContext.GetParameter("signingKey")),
+                minimalConfirmationLevel: ConfirmationLevel.Parse(_scenarioContext.GetParameter("minimalConfirmationLevel"))
+            );
             
             _scenarioContext.SetCallResult(callResult);
         }

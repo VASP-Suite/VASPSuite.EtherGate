@@ -8,18 +8,20 @@ using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
 using VASPSuite.EtherGate.Extensions;
+using VASPSuite.EtherGate.Strategies;
 
 namespace VASPSuite.EtherGate
 {
     [PublicAPI]
     public sealed class VASPDirectoryClient : VASPRegistryClient, IVASPDirectoryClient
     {
-        private static Regex VASPCredentialsRefRegex = new Regex(@"^0x[0-9a-f]{64}$", RegexOptions.Singleline & RegexOptions.Compiled);
+        private static Regex _vaspCredentialsRefRegex = new Regex(@"^0x[0-9a-f]{64}$", RegexOptions.Singleline & RegexOptions.Compiled);
         
         public VASPDirectoryClient(
             Address address,
+            IEstimateGasPriceStrategy estimateGasPriceStrategy,
             IWeb3 web3)
-            : base(address, web3)
+            : base(address, estimateGasPriceStrategy, web3)
         {
         }
         
@@ -45,7 +47,7 @@ namespace VASPSuite.EtherGate
         {
             var vaspCredentialsRefString = vaspCredentialsRef.ToString();
             
-            if (!VASPCredentialsRefRegex.IsMatch(vaspCredentialsRefString))
+            if (!_vaspCredentialsRefRegex.IsMatch(vaspCredentialsRefString))
             {
                 throw new FormatException("Specified VASP credentials ref is not properly formatted to be used with a VASP directory.");
             }

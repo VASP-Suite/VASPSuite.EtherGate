@@ -10,7 +10,7 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.Extensions
     {
         private const string CallResultKey = "CallResult";
         private const string ExceptionKey = "Exception";
-
+        private const string ParametersKey = "Parameters";
         
         public static object GetCallResult(
             this ScenarioContext scenarioContext)
@@ -79,6 +79,18 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.Extensions
             return scenarioContext.GetRealContractAddress(Address.Parse(realAddress));
         }
         
+        public static string GetParameter(
+            this ScenarioContext scenarioContext,
+            string parameterName)
+        {
+            if (!scenarioContext.ContainsKey(ParametersKey))
+            {
+                scenarioContext[ParametersKey] = new Dictionary<string, string>(StringComparer.Ordinal); 
+            }
+            
+            return ((IDictionary<string, string>) scenarioContext[ParametersKey])[parameterName];
+        }
+        
         public static Address GetRealContractAddress(
             this ScenarioContext scenarioContext,
             Address fakeAddress)
@@ -120,6 +132,19 @@ namespace VASPSuite.EtherGate.BehaviorTests.Support.Extensions
             where T : Exception
         {
             scenarioContext[ExceptionKey] = exception;
+        }
+        
+        public static void SetParameter(
+            this ScenarioContext scenarioContext,
+            string parameterName,
+            string parameterValue)
+        {
+            if (!scenarioContext.ContainsKey(ParametersKey))
+            {
+                scenarioContext[ParametersKey] = new Dictionary<string, string>(StringComparer.Ordinal); 
+            }
+            
+            ((IDictionary<string, string>) scenarioContext[ParametersKey])[parameterName] = parameterValue;
         }
         
         private static ICollection<SmartContract> GetContracts(

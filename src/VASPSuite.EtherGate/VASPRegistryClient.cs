@@ -7,6 +7,7 @@ using Multiformats.Hash;
 using Multiformats.Hash.Algorithms;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Web3;
+using VASPSuite.EtherGate.Strategies;
 
 namespace VASPSuite.EtherGate
 {
@@ -15,8 +16,9 @@ namespace VASPSuite.EtherGate
     {
         protected VASPRegistryClient(
             Address address,
+            IEstimateGasPriceStrategy estimateGasPriceStrategy,
             IWeb3 web3)
-            : base(address, web3)
+            : base(address, estimateGasPriceStrategy, web3)
         {
         }
         
@@ -38,11 +40,11 @@ namespace VASPSuite.EtherGate
             );
         }
 
-        public async Task<bool> ValidateCredentialsAsync(
+        public Task<bool> ValidateCredentialsAsync(
             string credentials,
             VASPCredentialsHash credentialsHash)
         {
-            return await CallWithSimpleResultAsync
+            return CallWithSimpleResultAsync
             (
                 new ValidateCredentialsCall
                 {

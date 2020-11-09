@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace VASPSuite.EtherGate
@@ -8,6 +9,7 @@ namespace VASPSuite.EtherGate
         
         Task<BlockchainOperationState> GetCurrentStateAsync();
         
-        Task<BlockchainOperationState> WaitForExecutionAsync();
+        Task WaitForExecutionAsync(
+            CancellationToken cancellationToken = default);
     }
 }

@@ -68,6 +68,12 @@ namespace VASPSuite.EtherGate
         {
             return !left.Equals(right);
         }
+
+        public static implicit operator string(
+            BlockchainOperationId id)
+        {
+            return id._value.ToString();
+        }
         
         
         internal class Digest : ByteArrayDigest
