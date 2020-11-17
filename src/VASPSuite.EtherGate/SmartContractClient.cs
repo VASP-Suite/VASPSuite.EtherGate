@@ -142,10 +142,24 @@ namespace VASPSuite.EtherGate
             transactionInput.From = from;
             transactionInput.GasPrice = new HexBigInteger(await EstimateGasPriceStrategy.ExecuteAsync());
 
-            var transactionHash = await Web3.Eth.Transactions
-                .SendTransaction
-                .SendRequestAsync(transactionInput);
+            string transactionHash;
+            
+            if (Web3.TransactionManager.Account != null)
+            {
+                var signedTransaction = await Web3.TransactionManager
+                    .SignTransactionAsync(transactionInput);
 
+                transactionHash = await Web3.Eth.Transactions
+                    .SendRawTransaction
+                    .SendRequestAsync(signedTransaction);
+            }
+            else
+            {
+                transactionHash = await Web3.Eth.Transactions
+                    .SendTransaction
+                    .SendRequestAsync(transactionInput);
+            }
+            
             var blockchainOperationId = BlockchainOperationId.Parse(transactionHash);
 
             return new BlockchainOperation(blockchainOperationId, Web3, minimalConfirmationLevel);
